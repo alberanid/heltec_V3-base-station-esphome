@@ -78,11 +78,14 @@ sx126x:
     then:
       - lambda: |-
           ESP_LOGD("lora", "Packet received: size=%d RSSI=%.1f dBm SNR=%.1f dB", x.size(), rssi, snr);
+          bool hatch_open;
+          bool door_open;
+          uint8_t battery;
           // CubeCell packet format: [ID=0x01][Type=0x01][Hatch][Door][Battery]
           if (x.size() >= 5 && x[0] == 0x01 && x[1] == 0x01) {
-            bool hatch_open = x[2];
-            bool door_open = x[3];
-            uint8_t battery = x[4];
+            hatch_open = x[2];
+            door_open = x[3];
+            battery = x[4];
             
             // Log received packet
             ESP_LOGD("lora", "Lora Base Station: Hatch=%s Door=%s Batt=%d%% RSSI=%.1fdBm SNR=%.1fdB", 
@@ -100,6 +103,74 @@ sx126x:
             // Log unknown packet
             ESP_LOGW("lora", "Unknown packet received (size=%d)", x.size());
           }
+
+          // Update Home Assistant entities
+          id(mailbox_hatch_state) = hatch_open;
+          id(mailbox_door_state) = door_open;
+          id(mailbox_battery_state) = battery;
+          id(mailbox_rssi_state) = rssi;
+          id(mailbox_snr_state) = snr;
+
+          id(mailbox_hatch).publish_state(hatch_open);
+          id(mailbox_door).publish_state(door_open);
+          id(mailbox_battery).publish_state(battery);
+          id(mailbox_rssi).publish_state(rssi);
+          id(mailbox_snr).publish_state(snr);
+
+# Home Assistant entities (API)
+binary_sensor:
+  - platform: template
+    name: "LoRa Mailbox Hatch"
+    id: mailbox_hatch
+    device_class: door
+    lambda: "return id(mailbox_hatch_state);"
+  - platform: template
+    name: "LoRa Mailbox Door"
+    id: mailbox_door
+    device_class: door
+    lambda: "return id(mailbox_door_state);"
+
+sensor:
+  - platform: template
+    name: "LoRa Mailbox Battery"
+    id: mailbox_battery
+    unit_of_measurement: "%"
+    accuracy_decimals: 0
+    lambda: "return id(mailbox_battery_state);"
+  - platform: template
+    name: "LoRa Mailbox RSSI"
+    id: mailbox_rssi
+    unit_of_measurement: "dBm"
+    accuracy_decimals: 1
+    lambda: "return id(mailbox_rssi_state);"
+  - platform: template
+    name: "LoRa Mailbox SNR"
+    id: mailbox_snr
+    unit_of_measurement: "dB"
+    accuracy_decimals: 1
+    lambda: "return id(mailbox_snr_state);"
+
+globals:
+  - id: mailbox_hatch_state
+    type: bool
+    restore_value: no
+    initial_value: 'false'
+  - id: mailbox_door_state
+    type: bool
+    restore_value: no
+    initial_value: 'false'
+  - id: mailbox_battery_state
+    type: int
+    restore_value: no
+    initial_value: '0'
+  - id: mailbox_rssi_state
+    type: float
+    restore_value: no
+    initial_value: '0.0'
+  - id: mailbox_snr_state
+    type: float
+    restore_value: no
+    initial_value: '0.0'
 
 # Time for logging
 time:
