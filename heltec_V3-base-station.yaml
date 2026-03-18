@@ -5,6 +5,10 @@
 esphome:
   name: lora-base-station
   friendly_name: Lora Base Station
+  # Turn it off at boot
+  on_boot:
+    then:
+      - output.turn_off: onboard_led
 
 esp32:
   board: esp32-s3-devkitc-1
@@ -214,3 +218,14 @@ interval:
           payload: >-
             {"name":"LoRa Mailbox SNR","state_topic":"lora/mailbox","value_template":"{{ value_json.snr }}","unit_of_measurement":"dB","unique_id":"mailbox_snr","device":{"identifiers":["lora-base-station"],"manufacturer":"Heltec","name":"LoRa Base Station"}}
           retain: true
+
+output:
+  - platform: gpio
+    pin: GPIO35
+    id: onboard_led
+    #inverted: true   # often needed because the LED is active-low
+
+switch:
+  - platform: output
+    name: "Onboard LED"
+    output: onboard_led
