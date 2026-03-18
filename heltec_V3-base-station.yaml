@@ -189,35 +189,35 @@ mqtt:
   password: !secret mqtt_password
   topic_prefix: lora/base-station
 
-interval:
-  - interval: 24h
-    startup_delay: 20s
-    then:
-      - mqtt.publish:
-          topic: "homeassistant/binary_sensor/mailbox_hatch/config"
-          payload: >-
-            {"name":"LoRa Mailbox Hatch","state_topic":"lora/mailbox","value_template":"{{ value_json.hatch }}","device_class":"door","payload_on":"true","payload_off":"false","unique_id":"mailbox_hatch","device":{"identifiers":["lora-base-station"],"manufacturer":"Heltec","name":"LoRa Base Station"}}
-          retain: true
-      - mqtt.publish:
-          topic: "homeassistant/binary_sensor/mailbox_door/config"
-          payload: >-
-            {"name":"LoRa Mailbox Door","state_topic":"lora/mailbox","value_template":"{{ value_json.door }}","device_class":"door","payload_on":"true","payload_off":"false","unique_id":"mailbox_door","device":{"identifiers":["lora-base-station"],"manufacturer":"Heltec","name":"LoRa Base Station"}}
-          retain: true
-      - mqtt.publish:
-          topic: "homeassistant/sensor/mailbox_battery/config"
-          payload: >-
-            {"name":"LoRa Mailbox Battery","state_topic":"lora/mailbox","value_template":"{{ value_json.battery }}","unit_of_measurement":"%","unique_id":"mailbox_battery","device":{"identifiers":["lora-base-station"],"manufacturer":"Heltec","name":"LoRa Base Station"}}
-          retain: true
-      - mqtt.publish:
-          topic: "homeassistant/sensor/mailbox_rssi/config"
-          payload: >-
-            {"name":"LoRa Mailbox RSSI","state_topic":"lora/mailbox","value_template":"{{ value_json.rssi }}","unit_of_measurement":"dBm","unique_id":"mailbox_rssi","device":{"identifiers":["lora-base-station"],"manufacturer":"Heltec","name":"LoRa Base Station"}}
-          retain: true
-      - mqtt.publish:
-          topic: "homeassistant/sensor/mailbox_snr/config"
-          payload: >-
-            {"name":"LoRa Mailbox SNR","state_topic":"lora/mailbox","value_template":"{{ value_json.snr }}","unit_of_measurement":"dB","unique_id":"mailbox_snr","device":{"identifiers":["lora-base-station"],"manufacturer":"Heltec","name":"LoRa Base Station"}}
-          retain: true
+# interval:
+#   - interval: 24h
+#     startup_delay: 20s
+#     then:
+#       - mqtt.publish:
+#           topic: "homeassistant/binary_sensor/mailbox_hatch/config"
+#           payload: >-
+#             {"name":"LoRa Mailbox Hatch","state_topic":"lora/mailbox","value_template":"{{ value_json.hatch }}","device_class":"door","payload_on":"true","payload_off":"false","unique_id":"mailbox_hatch","device":{"identifiers":["lora-base-station"],"manufacturer":"Heltec","name":"LoRa Base Station"}}
+#           retain: true
+#       - mqtt.publish:
+#           topic: "homeassistant/binary_sensor/mailbox_door/config"
+#           payload: >-
+#             {"name":"LoRa Mailbox Door","state_topic":"lora/mailbox","value_template":"{{ value_json.door }}","device_class":"door","payload_on":"true","payload_off":"false","unique_id":"mailbox_door","device":{"identifiers":["lora-base-station"],"manufacturer":"Heltec","name":"LoRa Base Station"}}
+#           retain: true
+#       - mqtt.publish:
+#           topic: "homeassistant/sensor/mailbox_battery/config"
+#           payload: >-
+#             {"name":"LoRa Mailbox Battery","state_topic":"lora/mailbox","value_template":"{{ value_json.battery }}","unit_of_measurement":"%","unique_id":"mailbox_battery","device":{"identifiers":["lora-base-station"],"manufacturer":"Heltec","name":"LoRa Base Station"}}
+#           retain: true
+#       - mqtt.publish:
+#           topic: "homeassistant/sensor/mailbox_rssi/config"
+#           payload: >-
+#             {"name":"LoRa Mailbox RSSI","state_topic":"lora/mailbox","value_template":"{{ value_json.rssi }}","unit_of_measurement":"dBm","unique_id":"mailbox_rssi","device":{"identifiers":["lora-base-station"],"manufacturer":"Heltec","name":"LoRa Base Station"}}
+#           retain: true
+#       - mqtt.publish:
+#           topic: "homeassistant/sensor/mailbox_snr/config"
+#           payload: >-
+#             {"name":"LoRa Mailbox SNR","state_topic":"lora/mailbox","value_template":"{{ value_json.snr }}","unit_of_measurement":"dB","unique_id":"mailbox_snr","device":{"identifiers":["lora-base-station"],"manufacturer":"Heltec","name":"LoRa Base Station"}}
+#           retain: true
 
 output:
   - platform: gpio
