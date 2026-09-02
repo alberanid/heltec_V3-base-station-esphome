@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: Apache-2.0
 # Heltec WiFi LoRa 32 V3 - Lora Base Station LoRa Gateway
 # Receives CubeCell mailbox sensor packets
 # Integrates with Home Assistant MQTT
